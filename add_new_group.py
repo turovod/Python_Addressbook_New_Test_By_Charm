@@ -16,13 +16,9 @@ class UntitledTestCase(unittest.TestCase):
 
     def test_untitled_test_case(self):
         driver = self.driver
-        self.open_home_page(driver)
         self.login(driver, username="admin", password="secret")
-        self.open_groups_page(driver)
         self.create_group(driver, Group(name="aaa", header="bbb", footer="ccc"))
-        self.return_to_groups_page(driver)
         self.logout(driver)
-
 
     def tearDown(self):
         self.driver.quit()
@@ -35,6 +31,7 @@ class UntitledTestCase(unittest.TestCase):
         driver.find_element_by_link_text("groups").click()
 
     def create_group(self, driver, group):
+        self.open_groups_page(driver)
         driver.find_element_by_name("new").click()
         driver.find_element_by_name("group_name").click()
         driver.find_element_by_name("group_name").clear()
@@ -46,11 +43,14 @@ class UntitledTestCase(unittest.TestCase):
         driver.find_element_by_name("group_footer").clear()
         driver.find_element_by_name("group_footer").send_keys(group.footer)
         driver.find_element_by_name("submit").click()
+        self.return_to_groups_page(driver)
 
     def open_groups_page(self, driver):
         driver.find_element_by_link_text("groups").click()
 
     def login(self, driver, username, password):
+        self.open_home_page(driver)
+
         driver.find_element_by_name("user").click()
         driver.find_element_by_name("user").clear()
         driver.find_element_by_name("user").send_keys(username)
