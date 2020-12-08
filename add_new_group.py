@@ -9,7 +9,7 @@ class UntitledTestCase(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(30)
-        self.base_url = "https://www.google.com/"
+        self.base_url = "http://localhost/addressbook/"
         self.verificationErrors = []
         self.accept_next_alert = True
 
@@ -59,8 +59,8 @@ class UntitledTestCase(unittest.TestCase):
         driver.find_element_by_name("pass").send_keys(password)
         driver.find_element_by_xpath("//input[@value='Login']").click()
 
-    def open_home_page(self, driver):
-        driver.get("http://localhost/addressbook/")
+    def open_home_page(self, driver,):
+        driver.get(self.base_url)
 
     def is_element_present(self, how, what):
         try:
@@ -87,7 +87,6 @@ class UntitledTestCase(unittest.TestCase):
             return alert_text
         finally:
             self.accept_next_alert = True
-
 
 if __name__ == "__main__":
     unittest.main()
