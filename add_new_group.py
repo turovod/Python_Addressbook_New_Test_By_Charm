@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 from group import Group
-import unittest
+import pytest
 from application import Application
 
 
-class UntitledTestCase(unittest.TestCase):
-    def setUp(self):
-        self.app = Application()
+@pytest.fixture
+def app(request):
+    fixture = Application()
+    request.addfinalizer(fixture.destroy)
+    return fixture
 
-    def test_untitled_test_case(self):
-        self.app.login(username="admin", password="secret")
-        self.app.create_group(Group(name="aaa", header="bbb", footer="ccc"))
-        self.app.logout()
+def test_add_new_group(app):
+    app.login(username="admin", password="secret")
+    app.create_group(Group(name="aaa", header="bbb", footer="ccc"))
+    app.logout()
 
-    def tearDown(self):
-        self.app.destroy()
 
