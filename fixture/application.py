@@ -13,6 +13,13 @@ class Application:
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
 
+    def is_valid(self):
+        try:
+            self.driver.current_url
+            return True
+        except:
+            return False
+
     def destroy(self):
         self.driver.quit()
 
