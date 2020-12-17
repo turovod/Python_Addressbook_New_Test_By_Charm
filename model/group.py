@@ -6,7 +6,20 @@ class Group:
         self.id = id
 
     def __repr__(self):  # string representation of an object
-        return "%s:%s" % (self.id, self.name)
+        # return "%s:%s" % (self.id, self.name)
+        return f"{self.id}:{self.name}"
 
     def __eq__(self, other):  # object equality rules
-        return self.id == other.id and self.name == other.name
+        # return self.id == other.id and self.name == other.name
+
+        # if self.id is None and self.name == other.name:
+        #     return True
+        # elif other.id is None and self.name == other.name:
+        #     return True
+        # elif self.id == other.id and self.name == other.name:
+        #     return True
+        # else:
+        #     return False
+
+        # Transform
+        return (self.id is None or other.id is None or self.id == other.id) and self.name == other.name

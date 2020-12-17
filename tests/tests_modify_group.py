@@ -6,10 +6,19 @@ def test_modify_group_name(app):
         app.group.create(Group(name="mod_name"))
 
     old_groups = app.group.get_group_list()
-    app.group.modify(Group(name="modify_aaa"))
+    group = Group(name="modify_aaa")
+    group.id = old_groups[0].id
+    app.group.modify(group)
     new_groups = app.group.get_group_list()
 
     assert len(old_groups) == len(new_groups)
+
+    old_groups[0] = group
+
+    def get_id(gr):
+        return int(gr.id)
+    # Method sorted sorts by numbers
+    assert sorted(old_groups, key=get_id) == sorted(new_groups, key=get_id)
 
 
 def test_modify_group_header(app):
