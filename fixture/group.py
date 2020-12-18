@@ -19,19 +19,20 @@ class GroupHelper:
         self.fill_group_form(group)
         driver.find_element_by_name("submit").click()
         self.return_to_groups_page()
-        self.group_cache = None
 
     def modify(self, new_group_data):
+        self.modify_by_index(0, new_group_data)
+
+    def modify_by_index(self, index, new_group_data):
         driver = self.app.driver
         self.open_groups_page()
-        self.select_first_group()
+        self.select_group_by_index(index)
         # open modification form
         driver.find_element_by_name("edit").click()
         self.fill_group_form(new_group_data)
         # submit group modification
         driver.find_element_by_name("update").click()
         self.return_to_groups_page()
-        self.group_cache = None
 
     def fill_group_form(self, group):
         driver = self.app.driver
@@ -47,17 +48,23 @@ class GroupHelper:
             driver.find_element_by_name(field_name).send_keys(text)
 
     def delete_first_group(self):
+        self.delete_group_by_index(0)
+
+    def delete_group_by_index(self, index):
         driver = self.app.driver
         self.open_groups_page()
-        self.select_first_group()
+        self.select_group_by_index(index)
         # submit deletion
         driver.find_element_by_name("delete").click()
         self.return_to_groups_page()
-        self.group_cache = None
 
     def select_first_group(self):
         driver = self.app.driver
         driver.find_element_by_name("selected[]").click()
+
+    def select_group_by_index(self, index):
+        driver = self.app.driver
+        driver.find_elements_by_name("selected[]")[index].click()
 
     def open_groups_page(self):
         driver = self.app.driver
@@ -70,17 +77,12 @@ class GroupHelper:
         self.open_groups_page()
         return len(driver.find_elements_by_name("selected[]"))
 
-    group_cache = None
-
     def get_group_list(self):
-        if self.group_cache is None:
-            driver = self.app.driver
-            self.open_groups_page()
-            group_cache = []
-            for element in driver.find_elements_by_css_selector("span.group"):
-                text = element.text
-                id = element.find_element_by_name("selected[]").get_attribute("value")
-                group_cache.append(Group(name=text, id=id))
-        return list(group_cache)
-
-
+        driver = self.app.driver
+        self.open_groups_page()
+        group = []
+        for element in driver.find_elements_by_css_selector("span.group"):
+            text = element.text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            group.append(Group(name=text, id=id))
+        return list(group)
