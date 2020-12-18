@@ -8,13 +8,12 @@ def test_add_new_group(app):
     app.group.create(group)
     new_groups = app.group.get_group_list()
 
-    assert len(old_groups) + 1 == len(new_groups)
-
+    # assert len(old_groups) + 1 == len(new_groups)
+    assert len(old_groups) + 1 == app.group.count()  # faster
     old_groups.append(group)
-    assert old_groups == new_groups
 
-    # Compare sorted groups (optional)
-    def id_or_max(gr):
+    # Compare sorted groups
+    def id_or_max(gr): # All members of the default group None
         if gr.id is None:
             gr.id = new_groups[len(new_groups) - 1].id
         return gr.id
