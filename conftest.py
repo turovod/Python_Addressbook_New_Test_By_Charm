@@ -6,7 +6,7 @@ fixture = None
 
 # @pytest.fixture(scope="session") Common fixture for all session
 @pytest.fixture
-def app(request):
+def app():
     global fixture
 
     if fixture is None:
