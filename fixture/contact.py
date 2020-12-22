@@ -28,6 +28,19 @@ class ContactHelper:
                                     mobilephone=all_phones[1], workphone=all_phones[2], fax=all_phones[3]))
         return contacts
 
+    def get_contact_list_without_split(self):
+        driver = self.app.driver
+        contacts = []
+        self.app.open_home_page()
+        for row in driver.find_elements_by_name("entry"):
+            cell = row.find_elements_by_tag_name("td")
+            firstname = cell[1].text
+            lastname = cell[2].text
+            id = cell[0].find_element_by_tag_name("input").get_attribute("value")
+            all_phones = cell[5].text
+            contacts.append(Contact(firstname=firstname, lastname=lastname, id=id, all_phones_from_home_page=all_phones))
+        return contacts
+
     def open_contact_to_edit_by_index(self, index):
         driver = self.app.driver
         self.app.open_home_page()
