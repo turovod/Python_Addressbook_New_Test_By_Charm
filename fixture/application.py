@@ -10,6 +10,7 @@ class Application:
     def __init__(self):
         self.driver = webdriver.Firefox(executable_path="../Drivers/geckodriver.exe")
         # self.driver = webdriver.Chrome(executable_path="../Drivers/chromedriver.exe")
+        # self.driver = webdriver.Ie(executable_path="../Drivers/iedriver.exe")
         # self.driver.implicitly_wait(1) # waiting in seconds
         self.base_url = "http://localhost/addressbook/"
         self.session = SessionHelper(self)
