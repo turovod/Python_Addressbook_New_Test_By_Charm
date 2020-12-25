@@ -1,7 +1,9 @@
 import json
 import pytest
 from fixture.application import Application
+import os.path # for path to the config_file
 # warning! for the compiler to read the json file in the root directory it needs to be made working
+# or __file__
 
 fixture = None
 target = None
@@ -14,8 +16,10 @@ def app(request):
     # data for console input
     browser = request.config.getoption("--browser")
     if target is None:
-        with open(request.config.getoption("--target")) as config_file:
-            target = json.load(config_file)
+        # Glue the absolute path to the project and the relative path to the file
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), request.config.getoption("--target"))
+        with open(config_file) as f:
+            target = json.load(f)
     # base_url = request.config.getoption("--baseUrl") # base_url is config_file
     if fixture is None or not fixture.is_valid():
         # fixture = Application() # no console input
