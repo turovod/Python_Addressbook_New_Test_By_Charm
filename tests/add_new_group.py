@@ -1,22 +1,10 @@
 # -*- coding: utf-8 -*-
 import pytest
-import random
-import string
-from model.group import Group
-
-
-def random_string(prefix, maxlen):
-    symbols = string.ascii_letters + string.digits + " "
-    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
-
-
-testdata = [Group(name="Tom", header="Tom_header", footer="Tom_footer")] + [
-    Group(name=random_string("name: ", 3), header=random_string("header: ", 3), footer=random_string("footer: ", 3))
-    for i in range(2)
-]
-
-
 # IDs - Different options for test IDs
+# from data.add_group import testdata
+from data.add_group import constant as testdata
+
+
 @pytest.mark.parametrize("group", testdata, ids=[repr(x) for x in testdata])
 def test_add_new_group(app, group):
     pass
@@ -32,5 +20,3 @@ def test_add_new_group(app, group):
     group.id = str(_id)
     old_groups.insert(0, group)
     assert sorted(old_groups, key=lambda group: group.id) == sorted(new_groups, key=lambda group: group.id), f"old_groups {old_groups} == new_groups {new_groups}"
-
-# 5 - 4 14:30

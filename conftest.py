@@ -41,7 +41,7 @@ def stop(request):
     return fixture
 
 
-# data for console input
+# data for console input and json config file
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
     # parser.addoption("--baseUrl", action="store", default="http://localhost/addressbook/")
