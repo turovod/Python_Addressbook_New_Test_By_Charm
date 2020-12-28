@@ -49,4 +49,6 @@ file = f
 
 with open(file, "w") as out:
     out.write(json.dumps(testdata, default=lambda x: x.__dict__, indent=2))
+# default=lambda x: x.__dict__, indent=2 - The rule is how to get data from a method.
+# Convert to dictionary, indented by 2 spaces
 
