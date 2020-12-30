@@ -3,17 +3,21 @@ import json
 import pytest
 from fixture.application import Application
 import os.path # for path to the config_file
+from model.group import Group
+import Json
 # warning! for the compiler to read the json file in the root directory it needs to be made working
 # or __file__
 
 fixture = None
 target = None
+group_from_json = None
 
 # @pytest.fixture(scope="session") Common fixture for all session
 @pytest.fixture
 def app(request):
     global fixture
     global target
+    global group_from_json
     # data for console input
     browser = request.config.getoption("--browser")
     if target is None:
@@ -27,6 +31,7 @@ def app(request):
         fixture = Application(browser=browser, base_url=target['baseUrl'])
         # fixture.session.login(username="admin", password="secret")
     fixture.session.ensure_login(username=target['username'], password=target['password'])
+
     return fixture
 
 
@@ -37,7 +42,6 @@ def stop(request):
         # fixture.session.logout()
         fixture.session.ensure_logout()
         fixture.destroy()
-
     request.addfinalizer(fin)
     return fixture
 

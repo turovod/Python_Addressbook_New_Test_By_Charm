@@ -1,3 +1,5 @@
+import json
+
 from selenium import webdriver
 
 from model.group import Group
@@ -86,3 +88,12 @@ class GroupHelper:
             id = element.find_element_by_name("selected[]").get_attribute("value")
             group.append(Group(name=text, id=id))
         return list(group)
+
+    def get_group_from_json(self):
+        with open('../Json/group.json', 'r', encoding="utf-8") as f:
+            group_data = json.load(f)
+            group_from_json = Group()
+            group_from_json.name = group_data["name"]
+            group_from_json.header = group_data["header"]
+            group_from_json.footer = group_data["footer"]
+        return group_from_json
