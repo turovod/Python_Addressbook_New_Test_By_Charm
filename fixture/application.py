@@ -12,11 +12,11 @@ class Application:
             # launch from IDE
             # self.driver = webdriver.Firefox(executable_path="../Drivers/geckodriver.exe")
             # launch from console
-            self.driver = webdriver.Firefox(executable_path="D:/Pithon/Python_Addressbook_New_Test_By_Charm/Python_Addressbook_New_Test_By_Charm/Drivers/geckodriver.exe")
+            self.driver = webdriver.Firefox(executable_path=self.adapted_url_to_webdriver("Drivers\geckodriver.exe"))
         elif browser == "chrome":
-            self.driver = webdriver.Chrome(executable_path="D:/Pithon/Python_Addressbook_New_Test_By_Charm/Python_Addressbook_New_Test_By_Charm/Drivers/chromedriver.exe")
+            self.driver = webdriver.Chrome(executable_path=self.adapted_url_to_webdriver("Drivers\chromedriver.exe"))
         elif browser == "edge":
-            self.driver = webdriver.Edge(executable_path="D:/Pithon/Python_Addressbook_New_Test_By_Charm/Python_Addressbook_New_Test_By_Charm/Drivers/msedgedriver.exe")
+            self.driver = webdriver.Edge(executable_path=self.adapted_url_to_webdriver("Drivers\msedgedriver.exe"))
         else:
             raise ValueError(f"Unrecognised browser {browser}")
         # self.driver.implicitly_wait(1) # waiting in seconds
@@ -47,3 +47,9 @@ class Application:
         except NoSuchElementException as e:
             return False
         return True
+
+    def adapted_url_to_webdriver(self, local_driver_url):
+        wd_url = __file__
+        wd_url = str(wd_url).strip("fixture\\application.py")
+        wd_url = "\\".join([wd_url, local_driver_url])
+        return wd_url

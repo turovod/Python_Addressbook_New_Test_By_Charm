@@ -3,6 +3,7 @@ import json
 import pytest
 from fixture.application import Application
 import os.path # for path to the config_file
+from fixture.db import DbFixture
 from model.group import Group
 import Json
 # warning! for the compiler to read the json file in the root directory it needs to be made working
@@ -31,8 +32,21 @@ def app(request):
         fixture = Application(browser=browser, base_url=target['baseUrl'])
         # fixture.session.login(username="admin", password="secret")
     fixture.session.ensure_login(username=target['username'], password=target['password'])
-
     return fixture
+
+
+# fixture for database connection
+@pytest.fixture(scope="session")
+def db(request):
+    # db_config = load_config(request.config.getoption("--target"))
+    db_config = {"host": "127.0.0.1",  "name": "addressbook", "user": "root"}
+    db_fixture = DbFixture(host=db_config["host"], name=db_config["name"], user=db_config["user"], password="")
+
+    def fin():
+        db_fixture.destroy()
+
+    request.addfinalizer(fin)
+    return db_fixture
 
 
 # Common destroy fixture for all tests
