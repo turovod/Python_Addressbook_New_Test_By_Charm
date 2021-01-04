@@ -50,6 +50,6 @@ class Application:
 
     def adapted_url_to_webdriver(self, local_driver_url):
         wd_url = __file__
-        wd_url = str(wd_url).strip("fixture\\application.py")
+        wd_url = wd_url.strip("fixture\\application.py")
         wd_url = "\\".join([wd_url, local_driver_url])
         return wd_url

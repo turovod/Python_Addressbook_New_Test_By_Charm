@@ -9,9 +9,11 @@ import Json
 # warning! for the compiler to read the json file in the root directory it needs to be made working
 # or __file__
 
+
 fixture = None
 target = None
 group_from_json = None
+
 
 # @pytest.fixture(scope="session") Common fixture for all session
 @pytest.fixture
@@ -27,20 +29,27 @@ def app(request):
         with open(config_file) as f:
             target = json.load(f)
     # base_url = request.config.getoption("--baseUrl") # base_url is config_file
+    web_date = target["web"]
     if fixture is None or not fixture.is_valid():
         # fixture = Application() # no console input
-        fixture = Application(browser=browser, base_url=target['baseUrl'])
+        fixture = Application(browser=browser, base_url=web_date['baseUrl'])
         # fixture.session.login(username="admin", password="secret")
-    fixture.session.ensure_login(username=target['username'], password=target['password'])
+    fixture.session.ensure_login(username=web_date['username'], password=web_date['password'])
     return fixture
 
 
 # fixture for database connection
 @pytest.fixture(scope="session")
 def db(request):
+    global target
     # db_config = load_config(request.config.getoption("--target"))
-    db_config = {"host": "127.0.0.1",  "name": "addressbook", "user": "root"}
-    db_fixture = DbFixture(host=db_config["host"], name=db_config["name"], user=db_config["user"], password="")
+    # db_config = {"host": "127.0.0.1",  "name": "addressbook", "user": "root"}
+    if target is None:
+        db_config = os.path.join(os.path.dirname(os.path.abspath(__file__)), "target.json")
+        with open(db_config) as f:
+            target = json.load(f)
+    db_date = target["db"]
+    db_fixture = DbFixture(host=db_date["host"], name=db_date["name"], user=db_date["user"], password="")
 
     def fin():
         db_fixture.destroy()
