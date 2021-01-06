@@ -2,10 +2,11 @@ import importlib
 import json
 import pytest
 from fixture.application import Application
-import os.path # for path to the config_file
+import os.path  # for path to the config_file
 from fixture.db import DbFixture
 from model.group import Group
 import Json
+
 # warning! for the compiler to read the json file in the root directory it needs to be made working
 # or __file__
 
@@ -58,6 +59,12 @@ def db(request):
     return db_fixture
 
 
+@pytest.fixture()
+def check_ui(request):
+    # return True or False
+    return request.config.getoption("--check_ui")
+
+
 # Common destroy fixture for all tests
 @pytest.fixture(scope="session", autouse=True)
 def stop(request):
@@ -65,6 +72,7 @@ def stop(request):
         # fixture.session.logout()
         fixture.session.ensure_logout()
         fixture.destroy()
+
     request.addfinalizer(fin)
     return fixture
 
@@ -74,6 +82,7 @@ def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
     # parser.addoption("--baseUrl", action="store", default="http://localhost/addressbook/")
     parser.addoption("--target", action="store", default="target.json")
+    parser.addoption("--check_ui", action="store_true")
 
 
 def pytest_generate_tests(metafunc):
